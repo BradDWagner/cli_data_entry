@@ -1,7 +1,9 @@
-const inquirer = require('inquirer')
-const { appendFile } = require('./appendFile.js')
+const inquirer = require('inquirer');
+const { appendFile } = require('./utils/appendFile.js');
+const { effectiveFilter} = require('./utils/effectiveFilter.js');
+const { endFile } = require('./utils/endFile.js')
 
-
+//array of type objects to pair type names with their ids in the data schema
 const types = [
     {'number': 1, 'type': 'Normal'},
     {'number': 2, 'type': 'Fighting'},
@@ -21,58 +23,38 @@ const types = [
     {'number': 16, 'type': 'Dragon'},
     {'number': 17, 'type': 'Dark'},
     {'number': 18, 'type': 'Fairy'},
-]
-
-// function generatePrompt(){
-//     for(var i=0; i<types.length; i++){
-//         for(var j=0; j<types.length;j++){
-//             inquirer.prompt([
-//                 {
-//                     type: 'rawlist',
-//                     name: `effective${i}-${j}`,
-//                     message: `${types[i].type} attacks ${types[j].type}. It is:`,
-//                     choices: [
-//                         'Effective',
-//                         'Super effective',
-//                         'Not very effective',
-//                         'Not effective'
-//                     ]
-//                 }
-//             ])
-//             .then(data => {
-//                 appendFile(types[i].number, types[j].number, data.effective+i+'-'+j)
-//             })
-            
-//         }
-        
-//     }
-// };
+];
 
 async function generatePrompt(){
+    //loop through attacking types
     for(var i=0; i<types.length; i++){
+        //loop through defending types
         for(var j=0; j<types.length;j++){
+            //inquirer prompt to provide user with type matchups
             const data = await inquirer.prompt([
                 {
                     type: 'rawlist',
                     name: `effective`,
                     message: `${types[i].type} attacks ${types[j].type}. It is:`,
                     choices: [
-                        '1',
-                        '2',
-                        '0.5',
-                        '0'
-                    ]
+                        'Effective',
+                        'Super effective',
+                        'Not very effective',
+                        'Not effective'
+                    ],
+                    filter: (effective) => { return effectiveFilter(effective);}
                 }
             ])
-            console.log(types[i].number, types[j].number, data.effective)
             appendFile(types[i].number, types[j].number, data.effective)
         }
         
     }
+    endFile()
 };
 
 function init(){
     console.log("let's add some data")
     generatePrompt();
+
 }
 init();

@@ -1,10 +1,9 @@
 const fs = require('fs');
 
 const appendFile = async function (type1, type2, strength){
-    var text = `\n(${type1}, ${type2}, ${strength}), `
-    console.log(text)
+    var text = `\n(${type1}, ${type2}, ${strength}),`
     fs.appendFile('./dist/type_matchup.sql', text, (err) =>
-    err? console.error(err) : console.log('data added'))
+        err? console.error(err) : console.log('data added'))
 };
 
 
