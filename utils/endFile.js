@@ -6,7 +6,7 @@ const endFile = async function() {
     const stat = await fs.promises.stat(file)
     const fileSize = stat.size
     //remove the last ', ' from the file
-    await fs.promises.truncate(file, fileSize -2)
+    await fs.promises.truncate(file, fileSize -1)
     //add final semicolon
     await fs.appendFile(file, '\n;', (err) =>
         err? console.error(err) : console.log('file finished')) 

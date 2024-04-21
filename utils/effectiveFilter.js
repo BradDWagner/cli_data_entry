@@ -1,3 +1,4 @@
+//switch text input from users answer into data used by database
 const effectiveFilter = function(response) {
     switch(response) {
         case  'Effective':
