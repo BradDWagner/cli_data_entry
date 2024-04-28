@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const { appendFile } = require('./utils/appendFile.js');
 const { effectiveFilter} = require('./utils/effectiveFilter.js');
-const { endFile } = require('./utils/endFile.js')
+const { endFile } = require('./utils/endFile.js');
 
 //array of type objects to pair type names with their ids in the data schema
 const types = [
@@ -35,6 +35,7 @@ async function generatePrompt(){
                 {
                     type: 'rawlist',
                     name: `effective`,
+                    //message and choices made to be easily readible
                     message: `${types[i].type} attacks ${types[j].type}. It is:`,
                     choices: [
                         'Effective',
@@ -42,16 +43,20 @@ async function generatePrompt(){
                         'Not very effective',
                         'Not effective'
                     ],
+                    //readable choices are converted to conform to data 
                     filter: (effective) => { return effectiveFilter(effective);}
                 }
             ])
+            //current types and effective status passed to the appendFile function to be added to sql file
             appendFile(types[i].number, types[j].number, data.effective)
         }
         
     }
+    //endFile functions closes out sql file to make it usable
     endFile()
 };
 
+//start program
 function init(){
     console.log("let's add some data")
     generatePrompt();
